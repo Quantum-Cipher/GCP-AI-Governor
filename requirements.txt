@@ -1,0 +1,4 @@
+functions-framework==3.8.3
+Flask==3.1.2
+google-cloud-aiplatform==1.140.0
+google-cloud-logging==3.12.1
