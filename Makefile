@@ -6,7 +6,7 @@ MAIN=daemon/main.py
 SIMULATOR=daemon/simulator/simulate_event.py
 SMOKE_SCRIPT=scripts/smoke_test.sh
 
-.PHONY: help dev install run simulate smoke clean test
+.PHONY: help dev install run simulate smoke test clean
 
 help:
 	@echo "Available commands:"
