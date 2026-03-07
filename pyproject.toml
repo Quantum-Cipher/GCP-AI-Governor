@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gcp-ai-governor"
+version = "0.1.0"
+description = "AI-driven cloud governance agent for monitoring infrastructure events and enforcing policy decisions."
+readme = "README.md"
+requires-python = ">=3.10"
+license = {text = "AGPL-3.0"}
+authors = [
+    {name = "Drake Daniel Peters"}
+]
+
+dependencies = [
+    "flask",
+    "requests"
+]
+
+[project.urls]
+Homepage = "https://github.com/Quantum-Cipher/GCP-AI-Governor"
+Repository = "https://github.com/Quantum-Cipher/GCP-AI-Governor"
