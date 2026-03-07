@@ -1,0 +1,19 @@
+substitutions:
+  _REGION: us-central1
+  _SERVICE_NAME: daemonic-codex-ai-governor
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', '${_REGION}-docker.pkg.dev/${PROJECT_ID}/daemonic-codex-artifacts/${_SERVICE_NAME}:latest', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', '${_REGION}-docker.pkg.dev/${PROJECT_ID}/daemonic-codex-artifacts/${_SERVICE_NAME}:latest']
+  - name: 'gcr.io/google.com/cloudsdktool/gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE_NAME}'
+      - '--image=${_REGION}-docker.pkg.dev/${PROJECT_ID}/daemonic-codex-artifacts/${_SERVICE_NAME}:latest'
+      - '--region=${_REGION}'
+      - '--service-account=daemonic-core-sa@${PROJECT_ID}.iam.gserviceaccount.com'
+      - '--no-cpu-throttling'
+      - '--set-env-vars=LIVE_MODE=false'
