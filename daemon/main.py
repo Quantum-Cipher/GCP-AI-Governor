@@ -7,7 +7,10 @@ app = Flask(__name__)
 
 @app.route("/health", methods=["GET"])
 def health():
-    return jsonify({"status": "ok", "service": "gcp-ai-governor"}), 200
+    return jsonify({
+        "status": "ok",
+        "service": "gcp-ai-governor"
+    }), 200
 
 @app.route("/event", methods=["POST"])
 def receive_event():
@@ -27,7 +30,6 @@ def receive_event():
         "decision": decision,
         "action_result": result
     }), 200
-
 
 if __name__ == "__main__":
     print("AI Cloud Governance Agent running")
