@@ -1,0 +1,6 @@
+{
+  "event_type": "heartbeat",
+  "principal": "system-agent",
+  "resource": "projects/mythosblock-core",
+  "roleGranted": ""
+}

@@ -1,0 +1,6 @@
+{
+  "event_type": "iam.roleGranted",
+  "principal": "test-admin-user",
+  "resource": "projects/mythosblock-core",
+  "roleGranted": "roles/iam.serviceAccountAdmin"
+}

@@ -1,0 +1,28 @@
+substitutions:
+  _REGION: us-central1
+  _SERVICE_NAME: daemonic-daemon-service-staging
+
+steps:
+  - name: python:3.11
+    id: unit-tests
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        bash scripts/smoke_test.sh
+
+  - name: gcr.io/cloud-builders/gcloud
+    id: deploy-staging
+    args:
+      - run
+      - deploy
+      - ${_SERVICE_NAME}
+      - --source=.
+      - --region=${_REGION}
+      - --no-allow-unauthenticated
+      - --set-env-vars=GOOGLE_CLOUD_PROJECT=${PROJECT_ID},REGION=${_REGION},LIVE_MODE=false
+
+options:
+  logging: CLOUD_LOGGING_ONLY

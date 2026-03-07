@@ -1,0 +1,13 @@
+flowchart TD
+    A[Developer / Admin] -->|Policy Input| B[Local Governance Simulator]
+    B -->|Enforce Revoke/Allow/Ignore| C[Policy Engine]
+    C -->|Decision Output| D[Health Endpoint + Smoke Tests]
+    C -->|Structured Logs| E[Console / Future Cloud Logging]
+
+    F[Cloud Audit Logs] -.-> G[Cloud Run Service]
+    G -.-> H[Vertex AI Reasoning]
+    H -.-> I[Tool Execution Layer]
+    I -.-> J[GCP APIs]
+    J -.-> K[Cloud Logging / BigQuery]
+
+    B -.->|Promote to Cloud| G

@@ -1,0 +1,6 @@
+{
+  "event_type": "iam.roleGranted",
+  "principal": "test-owner-user",
+  "resource": "projects/mythosblock-core",
+  "roleGranted": "roles/owner"
+}

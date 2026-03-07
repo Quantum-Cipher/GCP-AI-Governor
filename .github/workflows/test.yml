@@ -1,0 +1,40 @@
+name: test
+
+on:
+  push:
+    branches: [main, feature/**]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  local-governor-validation:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Create virtual environment
+        run: python3 -m venv .venv
+
+      - name: Install dependencies
+        run: |
+          .venv/bin/python3 -m pip install --upgrade pip
+          .venv/bin/pip install -r requirements.txt
+
+      - name: Run smoke test
+        run: |
+          chmod +x scripts/smoke_test.sh
+          bash scripts/smoke_test.sh
+
+      - name: Show server log on failure
+        if: failure()
+        run: |
+          echo "=== smoke_test_server.log ==="
+          cat smoke_test_server.log || true

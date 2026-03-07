@@ -1,0 +1,22 @@
+steps:
+  - name: gcr.io/cloud-builders/gcloud
+    id: wait-for-approval
+    args:
+      - builds
+      - describe
+      - ${BUILD_ID}
+    waitFor: ['-']
+
+  - name: gcr.io/cloud-builders/gcloud
+    id: set-live-mode-true
+    args:
+      - run
+      - services
+      - update
+      - daemonic-daemon-service
+      - --region=us-central1
+      - --set-env-vars=LIVE_MODE=true
+      - --project=${PROJECT_ID}
+
+options:
+  logging: CLOUD_LOGGING_ONLY
