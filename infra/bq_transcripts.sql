@@ -14,5 +14,6 @@ CREATE TABLE IF NOT EXISTS `numeric-axe-zll0l.governor_audit.transcripts`
 )
 PARTITION BY DATE(insert_timestamp)
 OPTIONS (
-  description = 'AI Governor transcripts and decisions'
+  description = 'AI Governor ReAct transcripts and decisions'
 );
+

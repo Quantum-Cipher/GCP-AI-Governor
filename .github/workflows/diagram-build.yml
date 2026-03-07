@@ -1,0 +1,33 @@
+name: Generate Mermaid Diagram
+
+on:
+  push:
+    paths:
+      - "docs/architecture.mmd"
+      - ".github/workflows/diagram-build.yml"
+
+jobs:
+  build-diagram:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+
+      - name: Install mermaid-cli
+        run: |
+          npm install -g @mermaid-js/mermaid-cli
+
+      - name: Generate PNG
+        run: |
+          mmdc -i docs/architecture.mmd -o docs/architecture.png
+
+      - name: Commit updated diagram
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "actions@github.com"
+          git add docs/architecture.png
+          git commit -m "Auto-update architecture diagram" || echo "No changes"
+          git push

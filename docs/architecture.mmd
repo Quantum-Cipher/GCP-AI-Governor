@@ -1,13 +1,44 @@
 flowchart TD
-    A[Developer / Admin] -->|Policy Input| B[Local Governance Simulator]
-    B -->|Enforce Revoke/Allow/Ignore| C[Policy Engine]
-    C -->|Decision Output| D[Health Endpoint + Smoke Tests]
-    C -->|Structured Logs| E[Console / Future Cloud Logging]
+    A[fa:fa-user Developer / Admin] -->|Policy Input| B[fa:fa-laptop-code Local Governance Simulator]
+    B -->|Revoke / Allow / Ignore| C[fa:fa-balance-scale Policy Engine]
+    C -->|Decision Output| D[fa:fa-heartbeat Health Endpoint + Smoke Tests]
+    C -->|Structured Logs| E[fa:fa-file-alt Local Console / File Logs]
 
-    F[Cloud Audit Logs] -.-> G[Cloud Run Service]
-    G -.-> H[Vertex AI Reasoning]
-    H -.-> I[Tool Execution Layer]
-    I -.-> J[GCP APIs]
-    J -.-> K[Cloud Logging / BigQuery]
+    subgraph "Phase 1: Local Governance Simulator (Current)"
+        B
+        C
+        D
+        E
+    end
+
+    F[fa:fa-cloud Cloud Audit Logs<br/>(CreateProject, SetIamPolicy)] -.->|Eventarc Trigger| G[fa:fa-server Cloud Run<br/>(Functions Framework)]
+    G -->|Parse Event + Build Prompt| H[fa:fa-robot Vertex AI Gemini<br/>(gemini-2.5-flash)]
+    H -->|Supervised ReAct Loop<br/>(Function Calling + Max 8 Iterations)| I[fa:fa-tools Tool Execution Layer]
+    I -->|Dry-Run Default<br/>(LIVE_MODE=false)| J[fa:fa-google GCP APIs<br/>(Billing, IAM, etc.)]
+    I -->|Live Execution<br/>(LIVE_MODE=true)| J
+    J -->|Structured Transcript| K[fa:fa-database Cloud Logging<br/>+ BigQuery Sink]
+
+    subgraph "Phase 2–3: Cloud Dry-Run → Autonomous Enforcement (Next)"
+        F
+        G
+        H
+        I
+        J
+        K
+    end
+
+    L[fa:fa-user-shield Dual SAs:<br/>daemonic-core-sa (runtime)<br/>daemonic-orchestrator-sa (actions)] -->|Impersonation| I
 
     B -.->|Promote to Cloud| G
+    E -.->|Export to| K
+
+    classDef current fill:#e6f7ff,stroke:#1890ff,stroke-width:2px
+    classDef future fill:#f0f5ff,stroke:#597ef7,stroke-width:2px,stroke-dasharray: 5 5
+    classDef safety fill:#fff1f0,stroke:#ff4d4f
+
+    class B,C,D,E current
+    class F,G,H,I,J,K future
+    class L safety
+
+    L -->|Dry-Run Guardrail<br/>LIVE_MODE env var| I
+

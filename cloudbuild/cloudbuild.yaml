@@ -3,16 +3,18 @@ substitutions:
   _SERVICE_NAME: daemonic-daemon-service-staging
 
 steps:
+  # Step 1: Install dependencies and run unit tests
   - name: python:3.11
     id: unit-tests
     entrypoint: bash
     args:
       - -c
       - |
-        python -m pip install --upgrade pip
+        pip install --upgrade pip
         pip install -r requirements.txt
-        bash scripts/smoke_test.sh
+        pytest -q
 
+  # Step 2: Build and deploy to Cloud Run (staging)
   - name: gcr.io/cloud-builders/gcloud
     id: deploy-staging
     args:
@@ -21,8 +23,10 @@ steps:
       - ${_SERVICE_NAME}
       - --source=.
       - --region=${_REGION}
+      - --service-account=daemonic-core-sa@${PROJECT_ID}.iam.gserviceaccount.com
       - --no-allow-unauthenticated
       - --set-env-vars=GOOGLE_CLOUD_PROJECT=${PROJECT_ID},REGION=${_REGION},LIVE_MODE=false
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
