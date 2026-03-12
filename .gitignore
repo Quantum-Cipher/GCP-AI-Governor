@@ -17,3 +17,6 @@ __pycache__/
 .env
 .env.*
 Encrypted-Network-Stack-ENS-/
+
+# Test cache
+.pytest_cache/
