@@ -504,3 +504,8 @@ def governor(event: CloudEvent):
 def health():
     return "OK", 200
 
+
+# === GROK HEALTH CHECK (GET / for Cloud Run probes) ===
+@app.route("/", methods=["GET"])
+def health():
+    return "OK", 200
