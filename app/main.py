@@ -497,3 +497,10 @@ def governor(event: CloudEvent):
         },
         "action_result": action_result,
     }
+
+# === HEALTH CHECK FOR CLOUD RUN PROBES (added by Grok) ===
+# This returns 200 OK on GET / so the startup/liveness probes stop failing with 405
+@app.route("/", methods=["GET"])
+def health():
+    return "OK", 200
+
