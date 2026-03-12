@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PROJECT_ROOT="${HOME}/Documents/GCP-AI-Governor"
-VENV_PATH="${PROJECT_ROOT}/.venv"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 MAIN_APP="${PROJECT_ROOT}/daemon/main.py"
 SIMULATOR="${PROJECT_ROOT}/daemon/simulator/simulate_event.py"
 
-source "${VENV_PATH}/bin/activate"
+if [ -d "${PROJECT_ROOT}/.venv" ]; then
+  source "${PROJECT_ROOT}/.venv/bin/activate"
+fi
 
 python3 "${MAIN_APP}" > "${PROJECT_ROOT}/smoke_test_server.log" 2>&1 &
 SERVER_PID=$!
