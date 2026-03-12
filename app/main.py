@@ -19,6 +19,14 @@ from google.cloud import logging as cloud_logging
 import vertexai
 from vertexai.generative_models import GenerativeModel
 
+from flask import Flask
+
+app = Flask(__name__)
+
+@app.route("/", methods=["GET"])
+def health():
+    return "OK", 200
+
 from decision_record import (
     ActionResultContext,
     DecisionRecord,
