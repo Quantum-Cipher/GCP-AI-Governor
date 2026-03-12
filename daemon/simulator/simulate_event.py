@@ -3,8 +3,10 @@
 #
 # This file is part of the GCP AI Governor project.
 # See the LICENSE file for full license text.
-import requests
+
 import json
+
+import requests
 
 URL = "http://127.0.0.1:8080/event"
 

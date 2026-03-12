@@ -3,9 +3,15 @@
 #
 # This file is part of the GCP AI Governor project.
 # See the LICENSE file for full license text.
+
+import logging
+
+logger = logging.getLogger("gcp-ai-governor")
+
+
 def execute_action(decision, event):
     if decision == "revoke":
-        print("Simulated remediation: revoking role")
+        logger.info("Simulated remediation: revoking role")
         return {
             "action": "revoke",
             "principal": event.get("principal"),
@@ -13,12 +19,12 @@ def execute_action(decision, event):
         }
 
     if decision == "ignore":
-        print("Simulated remediation: ignoring event")
+        logger.info("Simulated remediation: ignoring event")
         return {
             "action": "ignore"
         }
 
-    print("Simulated remediation: no action required")
+    logger.info("Simulated remediation: no action required")
     return {
         "action": "none"
     }
