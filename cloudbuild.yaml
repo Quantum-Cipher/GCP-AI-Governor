@@ -1,16 +1,20 @@
 steps:
-  # Step 1: Deploy to Cloud Run using Google Cloud Buildpacks
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
+  - name: python:3.11
+    entrypoint: bash
     args:
-      - 'run'
-      - 'deploy'
-      - 'gcp-ai-governor'
-      - '--source=.'
-      - '--region=us-central1'
-      - '--service-account=daemonic-core-sa@numeric-axe-zll0l.iam.gserviceaccount.com'
-      - '--no-allow-unauthenticated'
-      - '--set-env-vars=LIVE_MODE=false,MAX_ITERATIONS=8,GOOGLE_CLOUD_PROJECT=numeric-axe-zll0l,REGION=us-central1'
+      - -lc
+      - |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+        if [ -f pyproject.toml ]; then pip install .; fi
+        pip install pytest
+        if [ -d tests ]; then
+          pytest -q
+        else
+          echo "No tests directory found, skipping pytest."
+        fi
 
 options:
   logging: CLOUD_LOGGING_ONLY
+
+timeout: "1200s"
