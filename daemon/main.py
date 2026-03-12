@@ -20,6 +20,7 @@ LIVE_MODE = os.environ.get("LIVE_MODE", "false").lower() == "true"
 MAX_ITERATIONS = int(os.environ.get("MAX_ITERATIONS", "8"))
 
 app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = 1 * 1024 * 1024  # 1 MB request size limit
 logger = logging.getLogger("gcp-ai-governor")
 logging.basicConfig(level=logging.INFO)
 
